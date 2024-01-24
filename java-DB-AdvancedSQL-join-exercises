@@ -2,7 +2,8 @@
 
 -- 1. Select all product names for suppliers from USA. 
 select p.product_name
-from suppliers s  join products p on s.supplier_id = p.supplier_id;
+from suppliers s  join products p on s.supplier_id = p.supplier_id
+where s.country = 'USA';
 
 -- 2. Select order id, order date, employee first and last name for
 -- employee whose last name starts with 'D' and for order that was shipped to Germany.
@@ -42,7 +43,13 @@ where r.region_description = 'Northern';
 
 -- 8. Select employee id and his boss last name for those who have orders with date later than '1996-07-18'.
 -- if an employee doesn't have a boss don't include him.
-select * from employees
+select distinct (e.employee_id), e.first_name, e.last_name , e2.last_name as boss_last_name from employees e 
+right join employees e2 
+on e.reports_to = e2.employee_id
+left join orders o 
+on o.employee_id = e.employee_id 
+where o.order_date > '1996-07-18'
+order by e.employee_id;
 
 -- 9. List the employees in the warehouse with orders that are not shipped yet.
 select distinct e.first_name, e.last_name
